@@ -374,35 +374,7 @@
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
         }
 
-        /* Controles para mobile */
-        .mobile-controls {
-            position: absolute;
-            bottom: 120px;
-            left: 0;
-            right: 0;
-            display: none;
-            justify-content: center;
-            gap: 2rem;
-            z-index: 10;
-        }
-
-        .control-btn {
-            width: 60px;
-            height: 60px;
-            background: rgba(30, 60, 114, 0.8);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            font-size: 1.5rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        .control-btn:active {
-            transform: scale(0.95);
-            background: rgba(30, 60, 114, 1);
-        }
+        /* Controles para mobile - removidos */
 
         /* Animações */
         @keyframes idle {
@@ -449,9 +421,7 @@
                 margin: 0 1rem;
             }
 
-            .mobile-controls {
-                display: flex;
-            }
+
 
             .game-hud {
                 padding: 0.5rem;
@@ -496,11 +466,7 @@
                 height: 450px;
             }
 
-            .control-btn {
-                width: 50px;
-                height: 50px;
-                font-size: 1.2rem;
-            }
+
         }
     </style>
 </head>
@@ -554,11 +520,7 @@
                 </div>
             </div>
 
-            <!-- Controles para mobile -->
-            <div class="mobile-controls">
-                <button class="control-btn" id="leftBtn">←</button>
-                <button class="control-btn" id="rightBtn">→</button>
-            </div>
+
 
             <!-- Tela de game over -->
             <div class="game-over" id="gameOver">
@@ -644,33 +606,26 @@
             // Controles de teclado
             document.addEventListener('keydown', handleKeyPress);
             
-            // Controles mobile
-            document.getElementById('leftBtn').addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                movePlayer('left');
-            });
-            
-            document.getElementById('rightBtn').addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                movePlayer('right');
-            });
 
-            // Controles de mouse para desktop
-            document.getElementById('leftBtn').addEventListener('mousedown', () => movePlayer('left'));
-            document.getElementById('rightBtn').addEventListener('mousedown', () => movePlayer('right'));
 
-            // Touch controls na área do jogo
+            // Touch controls suaves na área do jogo
             let touchStartX = 0;
+            let isMoving = false;
+            
             gameArea.addEventListener('touchstart', (e) => {
                 touchStartX = e.touches[0].clientX;
+                isMoving = true;
             });
 
             gameArea.addEventListener('touchmove', (e) => {
                 e.preventDefault();
+                if (!isMoving) return;
+                
                 const touchCurrentX = e.touches[0].clientX;
                 const diff = touchCurrentX - touchStartX;
                 
-                if (Math.abs(diff) > 20) {
+                // Movimento mais suave com menor threshold
+                if (Math.abs(diff) > 10) {
                     if (diff > 0) {
                         movePlayer('right');
                     } else {
@@ -678,6 +633,10 @@
                     }
                     touchStartX = touchCurrentX;
                 }
+            });
+
+            gameArea.addEventListener('touchend', () => {
+                isMoving = false;
             });
         }
 
@@ -907,5 +866,5 @@
             }
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96fa84cd1744a176',t:'MTc1NTI4MDA2My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96fa8f2bf051decb',t:'MTc1NTI4MDQ4OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
